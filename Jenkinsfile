@@ -1,30 +1,30 @@
 pipeline {
     agent {
-        node{
+        node {
             label 'maven'
         }
     }
-environment {
-    PATH = "/opt/maven/bin:$PATH"
-}    
+
+    environment {
+        PATH = "/opt/maven/bin:$PATH"
+    }
 
     stages {
-        stage('build'){
-            steps{
+        stage('Build') {
+            steps {
                 sh 'mvn clean install'
             }
-        } 
-    
-        stage('SonarQube analysis') {
-        environment {
-        scannerHome = tool 'valaxy-sonar-scanner'
-          }
-          steps{
-          withSonarQubeEnv('valaxy-sonarqube-server') { 
-          sh "${scannerHome}/bin/sonar-scanner"
-    }
-    }
-  }
-}   
-}
+        }
 
+        stage('SonarQube Analysis') {
+            environment {
+                scannerHome = tool 'valaxy-sonar-scanner'
+            }
+            steps {
+                withSonarQubeEnv('valaxy-sonarqube-server') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
+    }
+}
